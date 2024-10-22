@@ -28,9 +28,9 @@ pip install -r requirements.txt
 
 
  ## Available Log Formats
- -syslog
- -CEF
- -Json
+ - Syslog
+ - CEF
+ - Json
 
  To use the script, run the following commands:
 ```bash
