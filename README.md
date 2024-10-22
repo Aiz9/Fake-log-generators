@@ -14,5 +14,5 @@ This Python script generates random logs in different formats, including Syslog,
 Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/random-log-generator.git
+git clone https://github.com/Aiz9/Fake-log-generators.git
 cd random-log-generator
