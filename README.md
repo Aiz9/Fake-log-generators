@@ -23,11 +23,11 @@ pip install -r requirements.txt
 ```
  Note: This script uses built-in Python modules like random, json, and datetime, so no external libraries are required.
 
- #Usage
+ # Usage
  The script allows you to generate logs in different formats. Simply run the script and select your preferred format.
 
 
- ##available Log Formats
+ ## Available Log Formats
  -syslog
  -CEF
  -Json
@@ -46,5 +46,6 @@ Enter the number of logs to generate:
 ```
 
 
-#Contributing
+# Contributing
+
 Feel Free to submit issues or pull requests if you want to contribute to the development of this log generator. All contribution are welcome.
