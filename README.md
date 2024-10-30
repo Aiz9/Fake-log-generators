@@ -1,4 +1,4 @@
-# Random Log Generator
+# WAF Log Generator
 
 This Python script generates random logs in different formats, including Syslog, CEF, and JSON. The logs mimic real-world security events and provide useful simulation data for testing and analysis in cybersecurity environments.
 
