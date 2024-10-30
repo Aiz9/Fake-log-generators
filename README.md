@@ -40,9 +40,9 @@ You will be prompted to select the log format:
 ```bash
 Choose log format (syslog/cef/json):
 ```
-After selecting a format, You will be prompted to choose number of logs you want to generate:
+After selecting a format, You will be prompted to duration(in seconds) for logs want to generate:
 ```bash
-Enter the number of logs to generate:
+Enter the duration in seconds for log generation:
 ```
 
 
