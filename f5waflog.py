@@ -1,5 +1,6 @@
 import random
 import json
+import time
 from datetime import datetime, timedelta
 
 # Load data from the external JSON file
@@ -212,14 +213,29 @@ def generate_logs(num_logs=10, log_format="json"):
         print("Invalid log format selected.")
         return []
 
-# Ask user for log format
-user_input = input("Enter the log format (syslog, cef, json): ").strip().lower()
-num_logs = int(input("Enter the number of logs to generate: "))
+duration = int(input("Enter the duration in seconds for log generation: "))
 
-# Generate logs
-generated_logs = generate_logs(num_logs, user_input)
+# Start time for the log generation
+start_time = time.time()
 
-# Print generated logs
-print(f"--- {user_input.upper()} LOGS ---")
-for entry in generated_logs:
-    print(entry)
+# Open the log file for writing
+with open('generated_logs.log', 'w') as log_file:
+    log_file.write(f"--- {user_input.upper()} LOGS ---\n")
+    
+    # Generate logs continuously for the specified duration
+    while (time.time() - start_time) < duration:
+        if user_input == "syslog":
+            log_entry = generate_syslog_log()
+        elif user_input == "cef":
+            log_entry = generate_cef_log()
+        elif user_input == "json":
+            log_entry = generate_json_log()
+        else:
+            print("Invalid log format specified.")
+            break
+        
+        log_file.write(log_entry + '\n')
+        log_file.flush()  # Ensure the entry is written to the file
+        time.sleep(1)  # Wait for 1 second before generating the next log
+
+print(f"Logs have been written to generated_logs.log")
