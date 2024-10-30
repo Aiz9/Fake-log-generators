@@ -202,17 +202,19 @@ def generate_json_log():
     return json.dumps(log)
 
 # Function to generate logs in different formats based on user input
-def generate_logs(num_logs=10, log_format="json"):
+def generate_logs(log_format="json"):
     if log_format == "syslog":
-        return [generate_syslog_log() for _ in range(num_logs)]
+        return generate_syslog_log()
     elif log_format == "cef":
-        return [generate_cef_log() for _ in range(num_logs)]
+        return generate_cef_log()
     elif log_format == "json":
-        return [generate_json_log() for _ in range(num_logs)]
+        return generate_json_log()
     else:
         print("Invalid log format selected.")
-        return []
+        return None
 
+# Ask user for log format and duration
+user_input = input("Enter the log format (syslog, cef, json): ").strip().lower()
 duration = int(input("Enter the duration in seconds for log generation: "))
 
 # Start time for the log generation
@@ -224,18 +226,11 @@ with open('generated_logs.log', 'w') as log_file:
     
     # Generate logs continuously for the specified duration
     while (time.time() - start_time) < duration:
-        if user_input == "syslog":
-            log_entry = generate_syslog_log()
-        elif user_input == "cef":
-            log_entry = generate_cef_log()
-        elif user_input == "json":
-            log_entry = generate_json_log()
-        else:
-            print("Invalid log format specified.")
-            break
+        log_entry = generate_logs(log_format=user_input)
         
-        log_file.write(log_entry + '\n')
-        log_file.flush()  # Ensure the entry is written to the file
-        time.sleep(1)  # Wait for 1 second before generating the next log
+        if log_entry:  # Check if the log entry is valid
+            log_file.write(log_entry + '\n')
+            log_file.flush()  # Ensure the entry is written to the file
+            time.sleep(1)  # Wait for 1 second before generating the next log
 
 print(f"Logs have been written to generated_logs.log")
